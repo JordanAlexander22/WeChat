@@ -8,6 +8,19 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+//prebuilt io methods to establish connections
+io.on("connect", socket => {
+  console.log("new connect!");
+
+  socket.on("disconnect", () => {
+    console.log("user left");
+  });
+});
+
+const router = require("./router");
+
+app.use(router);
+
 server.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
