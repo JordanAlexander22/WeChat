@@ -22,8 +22,16 @@ const Chat = ({location}) => {
        setUserName(userName);
        setRoom(room);
 
-       console.log(socket)
-    })
+       socket.emit("join", {userName, room}, () => {
+           
+       });
+
+       return () => {
+           socket.emit("disconnect");
+           socket.off();  // basic setup for users joining and disconnecting
+
+       }
+    }, [ENDPOINT, location.search]);  //dependency array
     
     return(
         <h1>Chat component</h1>
