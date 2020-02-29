@@ -12,7 +12,7 @@ return(
             <div><input placeholder= "UserName" className= "joinInput" type= "text" onChange={(e) => setUserName(e.target.value)} /></div>
             <div> <input placeholder= "Room" className= "joinInput mt-20" type="text" onChange={(e) => setRoom(e.target.value)} /></div>
             {/* passing state through query rather than props */}
-            <Link onClick= {e => (!userName) || !room ? e.preventDefault() : null } to={`/chat?username=${userName}&room=${room}`} > 
+            <Link onClick= {e => (!userName) || !room ? e.preventDefault() : null } to={`/chat?userName=${userName}&room=${room}`} > 
                 <button className="button mt-20" type="submit"> SignIn</button>
             </Link>
         </div>
