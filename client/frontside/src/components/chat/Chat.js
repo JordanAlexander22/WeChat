@@ -37,11 +37,23 @@ const Chat = ({ location }) => {
   }, [messages]);
 
   //need function for sending messages
+  const sendMessage = (e) => {
+    e.preventDefault();
+
+    if(message) {
+      socket.emit("sendMessage", message, () => setMessage(""));
+    }
+  }
   
-  
-  
+  console.log(message, messages);
+
   return(
-  <h1>Chat component</h1>
+  <div className= "outerContainer">
+    <div className= "container">
+      <input value={message} onChange= {(e) => setMessage(e.target.value)}
+      onKeyPress= {e => e.key === "Enter" ? sendMessage(e) : null }/>
+    </div>
+  </div>
   )
 }
 
