@@ -1,42 +1,33 @@
-import React, {useState, useEffect} from 'react';  //hooks and lifecycle method
-import queryString from 'query-string'; //retriving the data from the url 
-import io from 'socket.io-client';
-
+import React, { useState, useEffect } from "react"; //hooks and lifecycle method
+import queryString from "query-string"; //retriving the data from the url
+import io from "socket.io-client";
 
 let socket;
 
+//location comes built in to react router
+const Chat = ({ location }) => {
+  const [name, setName] = useState("");
+  const [room, setRoom] = useState("");
+  const ENDPOINT = "localhost:5000";
 
-//location comes built in to react router 
-const Chat = ({location}) => {
+  useEffect(() => {
+    const { name, room } = queryString.parse(location.search);
 
-    const [userName, setUserName] = useState("");
-    const [room, setRoom] = useState("");
-    const ENDPOINT= "localhost:5000";
+    socket = io(ENDPOINT);
 
-    
-    useEffect(() => {
-       const {userName, room}= queryString.parse(location.search);
+    setName(name);
+    setRoom(room);
 
-       socket= io(ENDPOINT);
+    socket.emit("join", { name, room }, () => {});
 
-       setUserName(userName);
-       setRoom(room);
+    return () => {
+      socket.emit("disconnect");
 
-       socket.emit("join", {userName, room}, () => {
-           
-       });
+      socket.off(); // basic setup for users joining
+    };
+  }, [ENDPOINT, location.search]);
 
-       return () => {
-           socket.emit("disconnect");
-           socket.off();  // basic setup for users joining and disconnecting
-
-       }
-    }, [ENDPOINT, location.search]);  //dependency array
-    
-    return(
-        <h1>Chat component</h1>
-    )
-}
-
+  return <h1>Chat component</h1>;
+};
 
 export default Chat;
